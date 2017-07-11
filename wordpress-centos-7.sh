@@ -129,9 +129,7 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-
-$WPSALTS
-
+$wpsalts
 /**#@-*/
 /**
  * WordPress Database Table prefix.
@@ -139,7 +137,7 @@ $WPSALTS
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-/* $table_prefix  = 'wp_'; */
+/* \$table_prefix  = 'wp_'; */
 /**
  * For developers: WordPress debugging mode.
  *
@@ -167,7 +165,6 @@ cat > /srv/www/wordpress/wp-config.php <<__FILE__
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
     define('ABSPATH', dirname(__FILE__) . '/');
-
 /** Location of your WordPress configuration. */
 require_once(ABSPATH . '../wp-secure.d/wp-config.php');
 __FILE__
@@ -177,22 +174,19 @@ cat > /etc/nginx/conf.d/default.conf <<__FILE__
 server {
     listen       80;
     server_name  $FQDN;
-
     # note that these lines are originally from the "location /" block
     root   /usr/share/nginx/html;
     index index.php index.html index.htm;
-
     location / {
-        try_files $uri $uri/ =404;
+        try_files \$uri \$uri/ =404;
     }
     error_page 404 /404.html;
     error_page 500 502 503 504 /50x.html;
     location = /50x.html {
         root /usr/share/nginx/html;
     }
-
     location ~ \.php$ {
-        try_files $uri =404;
+        try_files \$uri =404;
         fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
