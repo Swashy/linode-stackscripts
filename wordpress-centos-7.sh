@@ -11,9 +11,9 @@
 #"Error creating textual authentication agent: Error opening current controlling terminal for the process (`/dev/tty')""
 
 use_systemctl() {
-	openvt 2
-	#pass vars into the bash shell we're making
-	setsid sh -c 'exec systemctl $1 $2 <> /dev/tty2 >&0 2>&1' $1 $2
+    openvt 2
+    #pass vars into the bash shell we're making
+    setsid sh -c 'exec systemctl $1 $2 <> /dev/tty2 >&0 2>&1' $1 $2
 }
 
 set -x
@@ -83,7 +83,8 @@ mysql --defaults-file=~/.my.cnf -e "CREATE USER wordpress@localhost IDENTIFIED B
 mysql --defaults-file=~/.my.cnf -e "grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress@';"
 mysql --defaults-file=~/.my.cnf -e "FLUSH PRIVILEGES;"
 
-wpsalts=$(wget -qO- https://api.wordpress.org/secret-key/1.1/salt)
+WPSALTS=$(wget -qO- https://api.wordpress.org/secret-key/1.1/salt)
+export $WPSALTS
 
 mkdir -p /srv/www/wp-secure.d/
 touch /srv/www/wp-secure.d/wp-config.php
@@ -113,7 +114,7 @@ define('DB_NAME', 'wordpress');
 /** MySQL database username */
 define('DB_USER', 'wordpress');
 /** MySQL database password */
-define('DB_PASSWORD', '$WPDBPASS);
+define('DB_PASSWORD', '$WPDBPASS');
 /** MySQL hostname */
 define('DB_HOST', 'localhost');
 /** Database Charset to use in creating database tables. */
@@ -129,7 +130,9 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-$wpsalts
+
+$WPSALTS
+
 /**#@-*/
 /**
  * WordPress Database Table prefix.
@@ -154,7 +157,7 @@ define('WP_DEBUG', false);
 /* That's all, stop editing! Happy blogging. */
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+    define('ABSPATH', dirname(__FILE__) . '/');
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
 __FILE__
